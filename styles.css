@@ -1843,3 +1843,61 @@ body.light-theme .project-overlay {
         padding: 24px;
     }
 }
+
+/* ==========================================================================
+   CORNER SOFTWARE ICONS — Hero Photo
+   ========================================================================== */
+.hero-image-frame {
+    position: relative;
+}
+
+.corner-icon {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    z-index: 10;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.corner-icon svg {
+    width: 52px;
+    height: 52px;
+    display: block;
+    border-radius: 12px;
+}
+
+.corner-icon:hover {
+    transform: scale(1.18) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+}
+
+/* Positions */
+.corner-tl { top: -18px;    left: -18px;    animation: floatCorner1 3.2s ease-in-out infinite; }
+.corner-tr { top: -18px;    right: -18px;   animation: floatCorner2 3.6s ease-in-out infinite; }
+.corner-bl { bottom: -18px; left: -18px;    animation: floatCorner3 4.0s ease-in-out infinite; }
+.corner-br { bottom: -18px; right: -18px;   animation: floatCorner4 3.4s ease-in-out infinite; }
+
+/* Unique floating keyframes for each corner */
+@keyframes floatCorner1 {
+    0%, 100% { transform: translate(0, 0) rotate(-4deg); }
+    50%       { transform: translate(-4px, -8px) rotate(-4deg); }
+}
+@keyframes floatCorner2 {
+    0%, 100% { transform: translate(0, 0) rotate(4deg); }
+    50%       { transform: translate(4px, -8px) rotate(4deg); }
+}
+@keyframes floatCorner3 {
+    0%, 100% { transform: translate(0, 0) rotate(4deg); }
+    50%       { transform: translate(-4px, 8px) rotate(4deg); }
+}
+@keyframes floatCorner4 {
+    0%, 100% { transform: translate(0, 0) rotate(-4deg); }
+    50%       { transform: translate(4px, 8px) rotate(-4deg); }
+}
