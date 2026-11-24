@@ -167,58 +167,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    /* ==========================================================================
-       LIGHTBOX POPUP
-       ========================================================================== */
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCategory = document.getElementById('lightbox-category');
-    const lightboxTitle = document.getElementById('lightbox-title');
-    const lightboxClose = document.querySelector('.lightbox-close');
-    const viewButtons = document.querySelectorAll('.btn-view-project');
-    
-    viewButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            
-            // Find relative card information
-            const card = btn.closest('.portfolio-item-card');
-            const img = card.querySelector('.project-img');
-            const title = card.querySelector('.project-title').textContent;
-            const category = card.querySelector('.project-category').textContent;
-            
-            lightboxImg.src = img.src;
-            lightboxCategory.textContent = category;
-            lightboxTitle.textContent = title;
-            
-            lightbox.classList.add('active');
-            lightbox.setAttribute('aria-hidden', 'false');
-            document.body.classList.add('no-scroll');
+    /* ======================================================================
+       SQUARE GALLERY POPUP - posters and logos
+    ====================================================================== */
+    const galleryModal = document.getElementById('na-image-modal');
+    const galleryImage = document.getElementById('na-modal-image');
+    const galleryTitle = document.getElementById('na-modal-title');
+    const galleryCategory = document.getElementById('na-modal-category');
+    const galleryClose = galleryModal ? galleryModal.querySelector('.na-modal-close') : null;
+
+    // Duplicate each unique sequence once only for a seamless marquee loop.
+    document.querySelectorAll('.na-poster-track, .na-logo-track-main').forEach(track => {
+        if (track.dataset.loopReady === '1') return;
+        const originals = Array.from(track.children);
+        originals.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            clone.querySelectorAll('button').forEach(button => button.setAttribute('tabindex', '-1'));
+            track.appendChild(clone);
         });
+        track.dataset.loopReady = '1';
     });
-    
-    const closeLightbox = () => {
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('no-scroll');
-        setTimeout(() => {
-            lightboxImg.src = '';
-        }, 300);
+
+    const openGalleryModal = (trigger) => {
+        if (!galleryModal || !galleryImage) return;
+        const image = trigger.dataset.image || trigger.querySelector('img')?.getAttribute('src');
+        if (!image) return;
+        galleryImage.src = image;
+        galleryImage.alt = trigger.dataset.title || trigger.querySelector('img')?.alt || 'Portfolio preview';
+        galleryTitle.textContent = trigger.dataset.title || galleryImage.alt;
+        galleryCategory.textContent = trigger.dataset.category || 'Portfolio';
+        galleryModal.classList.add('is-open');
+        galleryModal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('na-modal-active');
+        if (galleryClose) galleryClose.focus();
     };
-    
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-        // Close if click is outside target content image
-        if (e.target === lightbox) {
-            closeLightbox();
+    const closeGalleryModal = () => {
+        if (!galleryModal) return;
+        galleryModal.classList.remove('is-open');
+        galleryModal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('na-modal-active');
+        window.setTimeout(() => { if (galleryImage) galleryImage.src = ''; }, 250);
+    };
+    document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('.na-gallery-trigger');
+        if (trigger && !trigger.closest('[aria-hidden="true"]')) {
+            event.preventDefault();
+            openGalleryModal(trigger);
         }
     });
-    
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-            closeLightbox();
-        }
+    if (galleryClose) galleryClose.addEventListener('click', closeGalleryModal);
+    if (galleryModal) galleryModal.addEventListener('click', event => {
+        if (event.target === galleryModal) closeGalleryModal();
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && galleryModal?.classList.contains('is-open')) closeGalleryModal();
     });
 
     /* ==========================================================================
@@ -296,4 +299,18 @@ Thank you for downloading Nawas Ahamed's Professional Portfolio CV.
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
+});
+
+
+/* Nawas Ahamed portfolio enhancements: safe interaction helpers */
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.na-poster-card .btn-view-project').forEach(function (button) {
+    button.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); button.click(); }
+    });
+  });
+  document.querySelectorAll('.na-site-preview, .na-site-link').forEach(function (link) {
+    link.setAttribute('rel', 'noopener noreferrer');
+    link.setAttribute('target', '_blank');
+  });
 });
