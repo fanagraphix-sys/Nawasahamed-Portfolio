@@ -1,0 +1,9 @@
+LETTERHEAD SECTION
+No letterhead image was included in the uploads for this update, so the section is ready and currently displays an upload note.
+
+To add letterhead designs later:
+1. Create assets/letterheads/ folder.
+2. Copy your letterhead image files into that folder.
+3. Add image cards to the Letterhead Designs section in index.html using the same na-work-card + na-gallery-trigger pattern used in the other categories.
+
+All newly uploaded visiting card, flyer and poster images are already included in assets/ and wired to the click-to-open popup.

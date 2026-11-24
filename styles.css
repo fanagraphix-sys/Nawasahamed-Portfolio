@@ -2218,3 +2218,30 @@ body.light-theme .moon-icon { display: block !important; }
 .na-site-preview { overflow:hidden; }
 .na-site-preview .na-live-label { z-index:3; }
 @media(max-width:620px){.na-site-shot{object-position:top center}}
+
+/* =========================================================
+   NAWAS AHAMED | SEPARATE PRINT DESIGN CATEGORIES
+   Visiting Cards / Flyers / Posters / Letterheads
+========================================================= */
+.na-categorized-work{padding:10px 0 30px;background:var(--bg-primary);}
+.na-work-section{padding:64px 0 58px;background:var(--bg-primary);color:var(--text-primary);}
+.na-work-section:nth-child(even){background:var(--bg-secondary);}
+.na-work-section .section-container{width:min(1180px,calc(100% - 40px));margin-inline:auto;}
+.na-work-section .section-header{margin-bottom:30px;}
+.na-work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
+.na-work-card{display:flex;flex-direction:column;min-width:0;padding:0;overflow:hidden;text-align:left;border:1px solid var(--border-color,rgba(148,163,184,.22));border-radius:17px;background:var(--bg-surface);color:var(--text-primary);cursor:pointer;box-shadow:0 12px 34px rgba(0,0,0,.12);transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;}
+.na-work-card:hover{transform:translateY(-6px);border-color:var(--accent-color,#2997ff);box-shadow:0 18px 42px rgba(0,0,0,.2);}
+.na-work-image{display:flex;align-items:center;justify-content:center;width:100%;height:310px;padding:12px;background:var(--bg-surface-hover);overflow:hidden;}
+.na-work-image img{display:block;width:100%;height:100%;object-fit:contain;border-radius:8px;transition:transform .35s ease;}
+.na-work-card:hover .na-work-image img{transform:scale(1.025);}
+.na-work-caption{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 18px;}
+.na-work-caption span{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.na-work-caption small{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:var(--text-muted);}
+.na-work-caption strong{font-size:15px;line-height:1.4;color:var(--text-primary);font-weight:700;}
+.na-work-caption>b{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:var(--accent-color,#2997ff);color:#fff;font-size:18px;}
+.na-letterhead-empty{max-width:700px;margin:0 auto;padding:48px 28px;text-align:center;border:1px dashed var(--text-muted);border-radius:18px;background:var(--bg-surface);}
+.na-letterhead-icon{display:grid;place-items:center;width:58px;height:58px;margin:0 auto 15px;border-radius:16px;background:var(--bg-surface-hover);font-size:28px;color:var(--accent-color,#2997ff);}
+.na-letterhead-empty h3{margin:0 0 10px;color:var(--text-primary);font-size:21px;}
+.na-letterhead-empty p{margin:0;color:var(--text-secondary);font-size:14px;line-height:1.8;}
+@media(max-width:900px){.na-work-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.na-work-image{height:280px;}}
+@media(max-width:600px){.na-work-section{padding:45px 0 40px;}.na-work-section .section-container{width:calc(100% - 28px);}.na-work-grid{grid-template-columns:1fr;gap:16px;}.na-work-image{height:300px;padding:9px;}.na-work-caption{padding:14px;}.na-work-caption strong{font-size:14px;}.na-letterhead-empty{padding:35px 18px;}}
