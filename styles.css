@@ -2011,3 +2011,210 @@ body{background:#05070d;color:#f7f9ff}
 body.na-modal-active{overflow:hidden}
 @media(max-width:620px){.na-marquee-wrap{gap:13px;padding-bottom:38px}.na-marquee-track{gap:12px}.na-poster-card{width:190px;flex-basis:190px}.na-poster-caption{opacity:1;min-height:75px;padding:27px 10px 10px}.na-poster-caption .project-title{font-size:11px}.na-poster-caption .btn-view-project{width:30px;height:30px;flex-basis:30px}.na-logo-section{padding:58px 0!important}.na-logo-card{width:132px;height:132px;flex-basis:132px;padding:10px}.na-logo-inner{padding:8px}.na-image-modal{padding:14px}.na-modal-panel{width:96vw;padding:12px}.na-modal-close{top:10px;right:10px}}
 @media(prefers-reduced-motion:reduce){.na-marquee-track,.na-logo-track{animation:none!important}}
+
+
+/* ================================================================
+   THEME PATCH | RELIABLE DARK / LIGHT MODE
+   Keeps the gallery, logo cards, website cards and image popup in sync.
+   Dark is the default. Light mode is enabled by body.light-theme.
+================================================================ */
+:root {
+    color-scheme: dark;
+    --bg-primary: #05070d;
+    --bg-secondary: #0a101b;
+    --bg-surface: #101a29;
+    --bg-surface-hover: #172438;
+    --text-primary: #f4f7fc;
+    --text-secondary: #a5b3c7;
+    --text-muted: #78879c;
+    --border-color: rgba(145, 177, 220, .16);
+    --shadow-premium: 0 20px 40px rgba(0,0,0,.28);
+}
+
+body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary);
+}
+
+body.light-theme {
+    color-scheme: light;
+    --bg-primary: #f4f7fb;
+    --bg-secondary: #ffffff;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #edf2f8;
+    --text-primary: #142033;
+    --text-secondary: #46566d;
+    --text-muted: #66758a;
+    --border-color: rgba(20, 32, 51, .12);
+    --border-hover: rgba(22, 133, 255, .45);
+    --shadow-premium: 0 18px 42px rgba(20, 32, 51, .09);
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Header, navigation and reusable theme surfaces */
+.site-header,
+.mobile-nav-overlay,
+.theme-toggle-btn,
+.btn-secondary,
+.service-card,
+.timeline-item,
+.portfolio-item-card,
+.contact-form,
+.contact-info-card,
+.footer,
+footer {
+    transition: background-color .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+body.light-theme .site-header {
+    background: rgba(255,255,255,.94) !important;
+    border-bottom-color: rgba(20,32,51,.10) !important;
+    box-shadow: 0 8px 28px rgba(20,32,51,.06);
+}
+body.light-theme .desktop-nav .nav-link,
+body.light-theme .logo,
+body.light-theme .header-actions,
+body.light-theme .hamburger-line {
+    color: var(--text-primary);
+}
+body.light-theme .theme-toggle-btn {
+    background: #edf3fb;
+    border-color: rgba(20,32,51,.14);
+    color: #142033;
+}
+body.light-theme .mobile-nav-overlay {
+    background: rgba(248,250,253,.98) !important;
+}
+body.light-theme .mobile-link { color: var(--text-primary) !important; }
+
+/* Core page sections: replace the earlier hard-coded dark-only backgrounds */
+body.light-theme .hero-section,
+body.light-theme .about-section,
+body.light-theme .services-section,
+body.light-theme .experience-section,
+body.light-theme .portfolio-section,
+body.light-theme .contact-section,
+body.light-theme .site-footer,
+body.light-theme footer {
+    color: var(--text-primary);
+}
+body.light-theme .section-title,
+body.light-theme .hero-title,
+body.light-theme .hero-subtitle,
+body.light-theme .about-title,
+body.light-theme .timeline-content h3,
+body.light-theme .service-card h3,
+body.light-theme .contact-title {
+    color: var(--text-primary);
+}
+body.light-theme .hero-description,
+body.light-theme .section-description,
+body.light-theme .about-description,
+body.light-theme .service-card p,
+body.light-theme .timeline-content p,
+body.light-theme .contact-description {
+    color: var(--text-secondary);
+}
+body.light-theme .service-card,
+body.light-theme .timeline-item,
+body.light-theme .portfolio-item-card,
+body.light-theme .contact-form,
+body.light-theme .contact-info-card {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow-premium);
+}
+body.light-theme input,
+body.light-theme textarea,
+body.light-theme select {
+    color: var(--text-primary) !important;
+    background: #fff !important;
+    border-color: rgba(20,32,51,.18) !important;
+}
+body.light-theme input::placeholder,
+body.light-theme textarea::placeholder { color: #8290a3; }
+
+/* Added poster + logo + website showcase */
+body.light-theme .na-portfolio {
+    background: linear-gradient(180deg,#f5f8fd 0%,#edf3fa 55%,#f8faff 100%) !important;
+    color: var(--text-primary) !important;
+}
+body.light-theme .na-logo-section {
+    background: #eaf1f9 !important;
+    border-top-color: rgba(22,133,255,.18) !important;
+    border-bottom-color: rgba(22,133,255,.18) !important;
+    color: var(--text-primary) !important;
+}
+body.light-theme .na-websites-section {
+    background: radial-gradient(ellipse at 50% 0%,rgba(22,133,255,.09),transparent 52%),#f5f8fd !important;
+    color: var(--text-primary) !important;
+}
+body.light-theme .na-section-intro { color: #53647b !important; }
+body.light-theme .na-poster-card {
+    background: #fff !important;
+    border-color: rgba(22,133,255,.25) !important;
+    box-shadow: 0 12px 30px rgba(24,48,80,.12);
+}
+body.light-theme .na-logo-card {
+    background: #fff !important;
+    border-color: rgba(22,133,255,.24) !important;
+    box-shadow: 0 12px 28px rgba(24,48,80,.10);
+}
+body.light-theme .na-logo-inner { background: #f2f6fb !important; }
+body.light-theme .na-site-card {
+    background: linear-gradient(145deg,#fff,#f0f5fb) !important;
+    border-color: rgba(22,133,255,.20) !important;
+    box-shadow: 0 12px 32px rgba(24,48,80,.09);
+}
+body.light-theme .na-site-preview { background: #e8eff8 !important; }
+body.light-theme .na-site-info h3 { color: #142033 !important; }
+body.light-theme .na-site-info p { color: #586a82 !important; }
+
+/* Keep the mock website preview intentionally dark for contrast in both themes */
+body.light-theme .na-browser-screen {
+    background: radial-gradient(circle at 75% 25%,rgba(0,163,255,.34),transparent 30%),linear-gradient(135deg,#101d34,#07101d 70%) !important;
+    color: #fff !important;
+}
+
+/* Image popup adapts to selected theme */
+body.light-theme .na-modal-panel {
+    background: #f8fbff !important;
+    border-color: rgba(22,133,255,.28) !important;
+    box-shadow: 0 25px 90px rgba(15,35,65,.28);
+}
+body.light-theme .na-modal-caption,
+body.light-theme .na-modal-caption h3 { color: #142033 !important; }
+body.light-theme .na-modal-caption span { color: #0876df !important; }
+body.light-theme .na-modal-close {
+    background: #fff !important;
+    border-color: rgba(20,32,51,.2) !important;
+    color: #142033 !important;
+}
+
+/* Correct theme icon: show the action available in the current theme */
+.sun-icon { display: block !important; }
+.moon-icon { display: none !important; }
+body.light-theme .sun-icon { display: none !important; }
+body.light-theme .moon-icon { display: block !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; }
+}
+
+
+/* WEBSITE PORTFOLIO - SCREENSHOT IMAGE PREVIEWS */
+.na-browser-screen { isolation:isolate; }
+.na-site-shot {
+    position:absolute; inset:0; z-index:0; display:block;
+    width:100%; height:100%; object-fit:cover; object-position:top center;
+    background:#101d34; transition:transform .55s ease, opacity .3s ease;
+}
+.na-site-card:hover .na-site-shot { transform:scale(1.035); }
+.na-browser-screen:before,.na-browser-screen:after { z-index:1; pointer-events:none; }
+.na-screen-orbit { z-index:1; pointer-events:none; }
+.na-screen-monogram,.na-site-monogram,.na-screen-name,.na-screen-line,.na-screen-cta {
+    z-index:2; text-shadow:0 2px 14px rgba(0,0,0,.8);
+}
+.na-site-preview { overflow:hidden; }
+.na-site-preview .na-live-label { z-index:3; }
+@media(max-width:620px){.na-site-shot{object-position:top center}}

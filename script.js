@@ -34,27 +34,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ==========================================================================
        LIGHT & DARK THEME SWITCHER
+       Dark is the default; the selected theme is remembered between visits.
        ========================================================================== */
     const themeToggleBtn = document.getElementById('theme-toggle');
-    
-    // Check local storage or system preference
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-    
-    if (savedTheme === 'light' || (!savedTheme && systemPrefersLight)) {
-        document.body.classList.add('light-theme');
-    }
-    
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('light-theme');
-        
-        // Save user preference
-        if (document.body.classList.contains('light-theme')) {
-            localStorage.setItem('theme', 'light');
-        } else {
-            localStorage.setItem('theme', 'dark');
+
+    const readSavedTheme = () => {
+        try { return localStorage.getItem('theme'); }
+        catch (error) { return null; }
+    };
+
+    const applyTheme = (theme, save = false) => {
+        const isLight = theme === 'light';
+        document.body.classList.toggle('light-theme', isLight);
+        document.documentElement.classList.toggle('light-theme', isLight);
+        document.documentElement.style.colorScheme = isLight ? 'light' : 'dark';
+
+        if (themeToggleBtn) {
+            themeToggleBtn.setAttribute('aria-pressed', String(isLight));
+            themeToggleBtn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+            themeToggleBtn.setAttribute('title', isLight ? 'Switch to dark mode' : 'Switch to light mode');
         }
-    });
+
+        if (save) {
+            try { localStorage.setItem('theme', isLight ? 'light' : 'dark'); }
+            catch (error) { /* Theme still works when storage is unavailable. */ }
+        }
+    };
+
+    const savedTheme = readSavedTheme();
+    applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+            applyTheme(nextTheme, true);
+        });
+    }
 
     /* ==========================================================================
        MOBILE NAVIGATION OVERLAY
@@ -176,18 +191,82 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryCategory = document.getElementById('na-modal-category');
     const galleryClose = galleryModal ? galleryModal.querySelector('.na-modal-close') : null;
 
-    // Duplicate each unique sequence once only for a seamless marquee loop.
-    document.querySelectorAll('.na-poster-track, .na-logo-track-main').forEach(track => {
-        if (track.dataset.loopReady === '1') return;
-        const originals = Array.from(track.children);
-        originals.forEach(item => {
-            const clone = item.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            clone.querySelectorAll('button').forEach(button => button.setAttribute('tabindex', '-1'));
-            track.appendChild(clone);
+    // Add extra poster/logo files by listing them in assets/gallery.json.
+    // Static browser pages cannot automatically enumerate every file in a folder.
+    const buildPosterCard = (item) => {
+        const src = String(item.src || '').trim();
+        if (!src) return null;
+        const title = String(item.title || 'Creative Design');
+        const category = String(item.category || 'Graphic Design');
+        const card = document.createElement('article');
+        card.className = 'na-poster-card portfolio-item-card';
+        const button = document.createElement('button');
+        button.className = 'na-gallery-trigger';
+        button.type = 'button';
+        button.setAttribute('aria-label', `Open ${title}`);
+        button.dataset.image = src;
+        button.dataset.title = title;
+        button.dataset.category = category;
+        const imageWrap = document.createElement('span');
+        imageWrap.className = 'na-poster-image';
+        const image = document.createElement('img');
+        image.className = 'project-img';
+        image.src = src; image.alt = title; image.loading = 'lazy';
+        imageWrap.appendChild(image);
+        const caption = document.createElement('span');
+        caption.className = 'na-poster-caption';
+        caption.innerHTML = `<span class="project-meta"><span class="project-category"></span><span class="project-title"></span></span><span class="btn-view-project" aria-hidden="true">↗</span>`;
+        caption.querySelector('.project-category').textContent = category;
+        caption.querySelector('.project-title').textContent = title;
+        button.append(imageWrap, caption); card.appendChild(button);
+        return card;
+    };
+    const buildLogoCard = (item) => {
+        const src = String(item.src || '').trim();
+        if (!src) return null;
+        const title = String(item.title || 'Brand Logo');
+        const card = document.createElement('button');
+        card.className = 'na-logo-card na-gallery-trigger';
+        card.type = 'button'; card.dataset.image = src; card.dataset.title = title;
+        card.dataset.category = 'Brand Identity';
+        card.setAttribute('aria-label', `View ${title}`);
+        const inner = document.createElement('span'); inner.className = 'na-logo-inner';
+        const image = document.createElement('img'); image.src = src; image.alt = title; image.loading = 'lazy';
+        inner.appendChild(image);
+        const open = document.createElement('span'); open.className = 'na-logo-open'; open.textContent = 'VIEW LOGO ↗';
+        card.append(inner, open); return card;
+    };
+    const prepareMarquees = async () => {
+        try {
+            const response = await fetch('assets/gallery.json', { cache: 'no-cache' });
+            if (response.ok) {
+                const additions = await response.json();
+                const posterTracks = document.querySelectorAll('.na-poster-track');
+                const logoTrack = document.querySelector('.na-logo-track-main');
+                (Array.isArray(additions.extraPosters) ? additions.extraPosters : []).forEach((item, index) => {
+                    const card = buildPosterCard(item);
+                    if (card && posterTracks.length) posterTracks[index % posterTracks.length].appendChild(card);
+                });
+                (Array.isArray(additions.extraLogos) ? additions.extraLogos : []).forEach(item => {
+                    const card = buildLogoCard(item);
+                    if (card && logoTrack) logoTrack.appendChild(card);
+                });
+            }
+        } catch (error) {
+            // Keep the original portfolio visible if the optional JSON file is missing.
+        }
+        document.querySelectorAll('.na-poster-track, .na-logo-track-main').forEach(track => {
+            if (track.dataset.loopReady === '1') return;
+            Array.from(track.children).forEach(item => {
+                const clone = item.cloneNode(true);
+                clone.setAttribute('aria-hidden', 'true');
+                clone.querySelectorAll('button').forEach(button => button.setAttribute('tabindex', '-1'));
+                track.appendChild(clone);
+            });
+            track.dataset.loopReady = '1';
         });
-        track.dataset.loopReady = '1';
-    });
+    };
+    prepareMarquees();
 
     const openGalleryModal = (trigger) => {
         if (!galleryModal || !galleryImage) return;
@@ -314,3 +393,11 @@ document.addEventListener('DOMContentLoaded', function () {
     link.setAttribute('target', '_blank');
   });
 });
+
+
+// If a website screenshot service is unavailable, keep the branded fallback visible.
+document.addEventListener('error', (event) => {
+    if (event.target && event.target.classList && event.target.classList.contains('na-site-shot')) {
+        event.target.remove();
+    }
+}, true);
