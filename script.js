@@ -297,17 +297,3 @@ Thank you for downloading Nawas Ahamed's Professional Portfolio CV.
         currentYearSpan.textContent = new Date().getFullYear();
     }
 });
-
-
-/* Nawas Ahamed portfolio enhancements: safe interaction helpers */
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.na-poster-card .btn-view-project').forEach(function (button) {
-    button.addEventListener('keydown', function (event) {
-      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); button.click(); }
-    });
-  });
-  document.querySelectorAll('.na-site-preview, .na-site-link').forEach(function (link) {
-    link.setAttribute('rel', 'noopener noreferrer');
-    link.setAttribute('target', '_blank');
-  });
-});
